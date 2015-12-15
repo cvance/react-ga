@@ -271,6 +271,42 @@ var reactGA = {
           }
         }
       }
+    },
+
+    /**
+     * executeWithSubaction:
+     * GA execute action for plugin
+     * @param pluginName {String} e.g. 'ecommerce' or 'myplugin'
+     * @param action {String} e.g. 'setAction'
+     * @param subaction {String} e.g. 'checkout' or 'refund'
+     * @param payload {Object} optional e.g { id: '1x5e', name : 'My product to track' }
+     */
+    executeWithSubaction: function(pluginName, action, subaction, payload) {
+      if (typeof ga === 'function') {
+        if (typeof pluginName !== 'string') {
+          warn('Expected `pluginName` arg to be a String.');
+        } else if (typeof action !== 'string') {
+          warn('Expected `action` arg to be a String.');
+        } else {
+          var command = pluginName + ':' + action;
+          payload = payload || null;
+          if (payload) {
+            ga(command, subaction, payload);
+            if (_debug) {
+              log('called ga(\'' + command + '\');');
+              log('with subaction: ' + subaction);
+              log('with payload: ' + JSON.stringify(payload));
+            }
+          } else {
+            ga(command, subaction);
+            if (_debug) {
+              log('called ga(\'' + command + '\');');
+              log('with subaction: ' + subaction);
+            }
+
+          }
+        }
+      }
     }
   },
 
